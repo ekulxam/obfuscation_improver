@@ -5,4 +5,4 @@ With mod:</br>
 
 Without mod:</br>
 <img src="https://cdn.modrinth.com/data/cached_images/a0e8bb87ad838f85d4e8adc931267abd1bee5c8c.png" alt="Obfuscated text in a book without mod" width="300">
-<img src="https://cdn.modrinth.com/data/cached_images/f1081edbf5c2380371b59482ff496bff19b3afa6.png" alt="165 files of font atlas" width="322">
+<img src="https://cdn.modrinth.com/data/cached_images/f1081edbf5c2380371b59482ff496bff19b3afa6.png" alt="165 files of font atlas" width="364">

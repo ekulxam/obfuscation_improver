@@ -1,0 +1,15 @@
+{
+	"required": true,
+	"package": "survivalblock.obfuscation_improver.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+	],
+	"client": [
+		"FontManagerAccessor",
+		"FontStorageMixin",
+		"MinecraftClientAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

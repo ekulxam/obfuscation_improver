@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "obfuscation_improver",
+	"version": "${version}",
+	"name": "Obfuscated Text Improver",
+	"description": "Improves the performance of Minecraft's obfuscated text format (Fixes https://bugs.mojang.com/browse/MC-277733)",
+	"authors": [
+		"Survivalblock"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT-0",
+	"icon": "assets/obfuscation_improver/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"survivalblock.obfuscation_improver.ObfuscatedTextImprover"
+		]
+	},
+	"mixins": [
+		"obfuscation_improver.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": ">=1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
