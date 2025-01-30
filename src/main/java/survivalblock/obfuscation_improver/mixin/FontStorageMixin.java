@@ -42,8 +42,8 @@ public class FontStorageMixin {
 
     @WrapOperation(method = "getObfuscatedGlyphRenderer", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;"))
     private Object reduceObfuscationLag(Int2ObjectMap<?> instance, int i, Operation<Object> original) {
-        return original.call(instance, i);
-        //return original.call(obfuscation_improver$charactersByWidth, i);
+        //return original.call(instance, i);
+        return original.call(obfuscation_improver$charactersByWidth, i);
     }
 
     @Inject(method = "clear", at = @At("RETURN"))
