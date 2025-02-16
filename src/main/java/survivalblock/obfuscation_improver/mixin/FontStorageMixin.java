@@ -11,7 +11,6 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.BitmapFont;
 import net.minecraft.client.font.BuiltinEmptyGlyph;
 import net.minecraft.client.font.Font;
 import net.minecraft.client.font.FontStorage;
@@ -37,6 +36,7 @@ import java.util.List;
 public class FontStorageMixin {
 
     @Shadow @Final private Identifier id;
+
     @Unique
     private final Int2ObjectMap<IntList> obfuscation_improver$charactersByWidth = new Int2ObjectOpenHashMap<>();
 
