@@ -26,6 +26,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import survivalblock.obfuscation_improver.ObfuscatedTextImprover;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,16 +53,22 @@ public class FontStorageMixin {
     }
 
     @ModifyReturnValue(method = "applyFilters", at = @At("RETURN"))
-    private List<Font> setDefault(List<Font> original, @Local IntSet intSet) {
+    private List<Font> setDefault(List<Font> original, @Local IntSet intSet, @Local(argsOnly = true)List<Font.FontFilterPair> allFonts) {
         if (original.isEmpty()) {
             return original;
         }
-        if (!this.id.equals(MinecraftClient.DEFAULT_FONT_ID)) {
+        /*if (!this.id.equals(MinecraftClient.DEFAULT_FONT_ID)) {
             return original;
-        }
+        }*/
         List<Font> obfuscationFonts = new ArrayList<>();
         for (Font font : original) {
-            if (font instanceof UnihexFont) {
+            if (font instanceof UnihexFont unihexFont) {
+                //ObfuscatedTextImprover.LOGGER.info("Skipping font {} ");
+                /*int index = allFonts.stream().map(Font.FontFilterPair::provider).toList().indexOf(unihexFont);
+                if (index >= 0) {
+                    Font.FontFilterPair pair = allFonts.get(index);
+                    pair.filter().
+                }*/
                 continue;
             }
             obfuscationFonts.add(font);

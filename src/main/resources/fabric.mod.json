@@ -12,7 +12,7 @@
 		"sources": "https://github.com/ekulxam/obfuscation_improver",
 		"issues": "https://github.com/ekulxam/obfuscation_improver/issues"
 	},
-	"license": "MIT-0",
+	"license": "MIT",
 	"icon": "assets/obfuscation_improver/icon.png",
 	"environment": "client",
 	"entrypoints": {
