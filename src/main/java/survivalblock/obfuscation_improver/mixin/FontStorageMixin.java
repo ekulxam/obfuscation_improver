@@ -4,71 +4,54 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.font.GlyphInfo;
+import com.mojang.blaze3d.font.GlyphProvider;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.BuiltinEmptyGlyph;
-import net.minecraft.client.font.Font;
-import net.minecraft.client.font.FontStorage;
-import net.minecraft.client.font.Glyph;
-import net.minecraft.client.font.UnihexFont;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Debug;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import survivalblock.obfuscation_improver.ObfuscatedTextImprover;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.minecraft.client.gui.font.FontSet;
+import net.minecraft.client.gui.font.glyphs.SpecialGlyphs;
+import net.minecraft.client.gui.font.providers.UnihexProvider;
+import net.minecraft.util.Mth;
 
 @Debug(export = true)
-@Mixin(FontStorage.class)
+@Mixin(FontSet.class)
 public class FontStorageMixin {
-
-    @Shadow @Final private Identifier id;
 
     @Unique
     private final Int2ObjectMap<IntList> obfuscation_improver$charactersByWidth = new Int2ObjectOpenHashMap<>();
 
-    @WrapOperation(method = "getObfuscatedGlyphRenderer", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;", remap = false))
+    @WrapOperation(method = "getRandomGlyph", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;", remap = false))
     private Object reduceObfuscationLag(Int2ObjectMap<?> instance, int i, Operation<Object> original) {
-        //return original.call(instance, i);
         return original.call(obfuscation_improver$charactersByWidth, i);
     }
 
-    @Inject(method = "clear", at = @At("RETURN"))
+    @Inject(method = "resetTextures", at = @At("RETURN"))
     private void clearObfuscationImprover(CallbackInfo ci) {
         this.obfuscation_improver$charactersByWidth.clear();
     }
 
-    @ModifyReturnValue(method = "applyFilters", at = @At("RETURN"))
-    private List<Font> setDefault(List<Font> original, @Local IntSet intSet, @Local(argsOnly = true)List<Font.FontFilterPair> allFonts) {
+    @ModifyReturnValue(method = "selectProviders", at = @At("RETURN"))
+    private List<GlyphProvider> setDefault(List<GlyphProvider> original, @Local IntSet intSet, @Local(argsOnly = true)List<GlyphProvider.Conditional> allFonts) {
         if (original.isEmpty()) {
             return original;
         }
-        /*if (!this.id.equals(MinecraftClient.DEFAULT_FONT_ID)) {
-            return original;
-        }*/
-        List<Font> obfuscationFonts = new ArrayList<>();
-        for (Font font : original) {
-            if (font instanceof UnihexFont unihexFont) {
-                //ObfuscatedTextImprover.LOGGER.info("Skipping font {} ");
-                /*int index = allFonts.stream().map(Font.FontFilterPair::provider).toList().indexOf(unihexFont);
-                if (index >= 0) {
-                    Font.FontFilterPair pair = allFonts.get(index);
-                    pair.filter().
-                }*/
+        List<GlyphProvider> obfuscationFonts = new ArrayList<>();
+        for (GlyphProvider font : original) {
+            if (font instanceof UnihexProvider) {
                 continue;
             }
             obfuscationFonts.add(font);
@@ -76,11 +59,11 @@ public class FontStorageMixin {
         Collections.reverse(obfuscationFonts);
         intSet.forEach(
                 codePoint -> {
-                    for (Font font : obfuscationFonts) {
-                        Glyph glyph = font.getGlyph(codePoint);
-                        if (glyph != null && glyph != BuiltinEmptyGlyph.MISSING) {
+                    for (GlyphProvider font : obfuscationFonts) {
+                        GlyphInfo glyph = font.getGlyph(codePoint);
+                        if (glyph != null && glyph != SpecialGlyphs.MISSING) {
                             this.obfuscation_improver$charactersByWidth
-                                    .computeIfAbsent(MathHelper.ceil(glyph.getAdvance(false)), (Int2ObjectFunction<? extends IntList>)(i -> new IntArrayList()))
+                                    .computeIfAbsent(Mth.ceil(glyph.getAdvance(false)), (Int2ObjectFunction<? extends IntList>)(i -> new IntArrayList()))
                                     .add(codePoint);
                         }
                         break;
