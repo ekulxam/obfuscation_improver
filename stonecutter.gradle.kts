@@ -8,4 +8,4 @@ plugins {
     id("dev.kikugie.fletching-table.fabric") version "0.1.0-alpha.22" apply false
 }
 
-stonecutter active "1.21.1-fabric"
+stonecutter active "1.21.11-fabric"

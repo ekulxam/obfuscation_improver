@@ -4,15 +4,16 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.mojang.blaze3d.font.GlyphInfo;
+//? if =1.21.1
+/*import com.mojang.blaze3d.font.GlyphInfo;*/
 import com.mojang.blaze3d.font.GlyphProvider;
+import com.mojang.blaze3d.font.UnbakedGlyph;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +28,7 @@ import net.minecraft.client.gui.font.glyphs.SpecialGlyphs;
 import net.minecraft.client.gui.font.providers.UnihexProvider;
 import net.minecraft.util.Mth;
 
-@Debug(export = true)
+//@Debug(export = true)
 @Mixin(FontSet.class)
 public class FontStorageMixin {
 
@@ -60,10 +61,10 @@ public class FontStorageMixin {
         intSet.forEach(
                 codePoint -> {
                     for (GlyphProvider font : obfuscationFonts) {
-                        GlyphInfo glyph = font.getGlyph(codePoint);
-                        if (glyph != null && glyph != SpecialGlyphs.MISSING) {
+                        /*? =1.21.1 {*/ /*GlyphInfo *//*?} else {*/ UnbakedGlyph /*?}*/ glyph = font.getGlyph(codePoint);
+                        if (glyph != null && glyph/*? >1.21.1 {*/ .info() /*?}*/ != SpecialGlyphs.MISSING) {
                             this.obfuscation_improver$charactersByWidth
-                                    .computeIfAbsent(Mth.ceil(glyph.getAdvance(false)), (Int2ObjectFunction<? extends IntList>)(i -> new IntArrayList()))
+                                    .computeIfAbsent(Mth.ceil(glyph/*? >1.21.1 {*/ .info() /*?}*/.getAdvance(false)), (Int2ObjectFunction<? extends IntList>)(i -> new IntArrayList()))
                                     .add(codePoint);
                         }
                         break;

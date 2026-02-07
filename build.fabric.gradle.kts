@@ -75,7 +75,7 @@ fletchingTable {
         }
     }
     mixins.all {
-        automatic = true
+        automatic = false
     }
 }
 
