@@ -7,6 +7,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 //? if =1.21.1
 /*import com.mojang.blaze3d.font.GlyphInfo;*/
 import com.mojang.blaze3d.font.GlyphProvider;
+//? if >=1.21.9
 import com.mojang.blaze3d.font.UnbakedGlyph;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -61,10 +62,10 @@ public class FontStorageMixin {
         intSet.forEach(
                 codePoint -> {
                     for (GlyphProvider font : obfuscationFonts) {
-                        /*? =1.21.1 {*/ /*GlyphInfo *//*?} else {*/ UnbakedGlyph /*?}*/ glyph = font.getGlyph(codePoint);
-                        if (glyph != null && glyph/*? >1.21.1 {*/ .info() /*?}*/ != SpecialGlyphs.MISSING) {
+                        /*? <1.21.9 {*/ /*GlyphInfo *//*?} else {*/ UnbakedGlyph /*?}*/ glyph = font.getGlyph(codePoint);
+                        if (glyph != null && glyph/*? >=1.21.9 {*/ .info() /*?}*/ != SpecialGlyphs.MISSING) {
                             this.obfuscation_improver$charactersByWidth
-                                    .computeIfAbsent(Mth.ceil(glyph/*? >1.21.1 {*/ .info() /*?}*/.getAdvance(false)), (Int2ObjectFunction<? extends IntList>)(i -> new IntArrayList()))
+                                    .computeIfAbsent(Mth.ceil(glyph/*? >=1.21.9 {*/ .info() /*?}*/.getAdvance(false)), (Int2ObjectFunction<? extends IntList>)(i -> new IntArrayList()))
                                     .add(codePoint);
                         }
                         break;
